@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Request System - Hiroshi Red Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Hiroshi Proud Palette */
+            --hp-purple: #5A56BF;
+            --hp-dark-blue: #164F73;
+            --hp-green: #75A653;
+            --hp-salmon: #F2BC79;
+            --hp-red: #D9665B;
+
+            --bg-color: #0c0a0a;
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8f8f8;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow: hidden;
+            /* Prominent #D9665B Gradient Variation */
+            background:
+                radial-gradient(circle at 50% -20%, rgba(216, 102, 91, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 0% 100%, rgba(89, 86, 191, 0.1) 0%, transparent 40%),
+                linear-gradient(180deg, rgba(216, 102, 91, 0.08) 0%, #0c0a0a 100%),
+                #0c0a0a;
+        }
+
+        .queue-container {
+            width: 100vw;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .queue-header {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 10px 15px;
+            /* Compact */
+            margin-bottom: 15px;
+            /* Compact */
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(216, 102, 91, 0.15);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
+        }
+
+        .queue-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--hp-red), transparent);
+        }
+
+        .queue-title {
+            margin: 0;
+            font-size: 26px;
+            /* Compact */
+            font-weight: 800;
+            background: linear-gradient(to bottom, #fff 30%, var(--hp-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            filter: drop-shadow(0 0 10px rgba(216, 102, 91, 0.2));
+        }
+
+        .queue-instructions {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        .highlight {
+            color: var(--hp-red);
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 4px;
+            padding: 2px 8px;
+            /* Compact */
+            margin-top: 6px;
+            color: var(--hp-salmon);
+            font-family: monospace;
+            display: inline-block;
+            border: 1px solid rgba(216, 102, 91, 0.1);
+            font-size: 0.8rem;
+        }
+
+        .queue-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            /* Compact */
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .queue-list::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .queue-list::-webkit-scrollbar-thumb {
+            background: var(--hp-red);
+            border-radius: 4px;
+        }
+
+        .song-card {
+            background: var(--card-glass);
+            border-radius: 10px;
+            padding: 10px 15px;
+            /* Compact */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .song-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(216, 102, 91, 0.2);
+            transform: scale(1.01);
+        }
+
+        .song-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--hp-red), var(--hp-purple));
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 12px rgba(216, 102, 91, 0.3);
+        }
+
+        .song-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .song-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            letter-spacing: 0.3px;
+        }
+
+        .song-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+        }
+
+        .nickname {
+            color: var(--hp-salmon);
+            font-weight: 500;
+        }
+
+        .song-right {
+            text-align: right;
+        }
+
+        .song-time {
+            color: var(--hp-red);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        .warning-message {
+            margin-top: 15px;
+            background: linear-gradient(90deg, rgba(216, 102, 91, 0.15), transparent);
+            color: var(--hp-red);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-left: 4px solid var(--hp-red);
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="queue-container">
+        <header class="queue-header">
+            <h1 class="queue-title">Sizin İstekleriniz</h1>
+            <div class="queue-instructions">
+                Parça isteği için chat'e <span class="highlight">/istek parça ismi - şarkıcı</span> yazın.
+                <br />
+                Gizlemek için sonuna <span class="highlight">.gizli</span> ekleyin.
+                <div class="example-box">
+                    Örn: /istek Firuze - Sezen Aksu .gizli
+                </div>
+            </div>
+        </header>
+
+        <div class="queue-list">
+            <div class="song-card">
+                <div class="song-main">
+                    <h3 class="song-title">Rakkas - Sezen Aksu</h3>
+                    <div class="song-meta">
+                        👤 <span class="nickname">Engin</span>
+                    </div>
+                </div>
+                <div class="song-right">
+                    <span class="song-time">14:50</span>
+                </div>
+            </div>
+
+            <div class="song-card">
+                <div class="song-main">
+                    <h3 class="song-title">Dudu - Tarkan</h3>
+                    <div class="song-meta">
+                        👤 <span class="nickname">Gizli</span>
+                    </div>
+                </div>
+                <div class="song-right">
+                    <span class="song-time">14:52</span>
+                </div>
+            </div>
+
+            <div class="song-card">
+                <div class="song-main">
+                    <h3 class="song-title">Unutamadım - Barış Manço</h3>
+                    <div class="song-meta">
+                        👤 <span class="nickname">Ece</span>
+                    </div>
+                </div>
+                <div class="song-right">
+                    <span class="song-time">14:55</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-message">
+            Lütfen istek listesinin azalmasını bekleyin.
+        </div>
+    </div>
+</body>
+
+</html>
