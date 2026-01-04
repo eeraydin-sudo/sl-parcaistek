@@ -33,10 +33,9 @@ const QueuePage = () => {
                     </h1>
                 </div>
                 <div className="queue-instructions">
-                    Parça isteklerinizi local chat'e <span className="highlight">/istek parça ismi - şarkıcı</span> şeklinde yazabilirsiniz.<br />
-                    (Adınızı gizlemek için sonuna <span className="highlight">.gizli</span> yazın.)
+                    Parça isteklerinizi local chat'e <span className="highlight">/istek parça ismi - şarkıcı</span> şeklinde yazabilirsiniz.
                     <div className="example-box">
-                        Örnek: /istek Firuze - Sezen Aksu .gizli
+                        Örnek: /istek Firuze - Sezen Aksu
                     </div>
                 </div>
             </header>

@@ -23,20 +23,10 @@ default
             if (remainingMsg == "") return;
 
             string userName = name;
-            string lowerRemaining = llToLower(remainingMsg);
-            integer gizliIndex = llSubStringIndex(lowerRemaining, ".gizli");
+            string songName = remainingMsg;
             string isAnonymous = "false";
             
-            if (gizliIndex != -1) {
-                // .gizli komutunu temizle
-                remainingMsg = llStringTrim(llDeleteSubString(remainingMsg, gizliIndex, gizliIndex + 5), STRING_TRIM);
-                isAnonymous = "true";
-                userName = "Gizli";
-            }
-            
-            string songName = remainingMsg;
             llInstantMessage(id, "Isteginiz alindi: " + songName);
-            if(isAnonymous == "true") llInstantMessage(id, "(Gizli Olarak Isaretlendi)");
 
             string json = "{\"song\": \"" + songName + "\", \"user_uuid\": \"" + (string)id + "\", \"user_name\": \"" + userName + "\", \"is_anonymous\": " + isAnonymous + "}";
             httpRequestId = llHTTPRequest(backendUrl + "/request", [HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/json"], json);

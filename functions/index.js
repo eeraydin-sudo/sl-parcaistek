@@ -96,15 +96,6 @@ app.post("/request", async (req, res) => {
         return res.status(400).json({ error: "Sarki adi gerekli" });
     }
 
-    let finalSong = song;
-    let finalIsAnonymous = is_anonymous === true || is_anonymous === "true";
-
-    // Fail-safe: Check if .gizli is in the song name (case insensitive)
-    if (finalSong.toLowerCase().includes(".gizli")) {
-        finalSong = finalSong.replace(/\.gizli/gi, "").trim();
-        finalIsAnonymous = true;
-    }
-
     try {
         // Pending list limit (only count pending requests)
         const snapshot = await db.collection("requests").where("status", "==", "pending").get();
@@ -113,11 +104,11 @@ app.post("/request", async (req, res) => {
         }
 
         const newRequest = {
-            song: finalSong,
+            song: song,
             note: note || "",
             user_uuid: user_uuid || "anonymous",
-            user_name: finalIsAnonymous ? "Gizli" : (user_name || "Bilinmiyor"),
-            is_anonymous: finalIsAnonymous,
+            user_name: user_name || "Bilinmiyor",
+            is_anonymous: false,
             status: "pending",
             timestamp: new Date().toISOString()
         };
